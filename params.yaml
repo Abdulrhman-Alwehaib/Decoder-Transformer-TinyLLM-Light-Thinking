@@ -1,0 +1,14 @@
+architecture:
+  block_size": 512
+  layers: 7
+  heads: 8
+  d_model: 256
+  vocab_size: 16000
+  dropRate: 0.1
+  model_padding: 3
+
+hyperParameters:
+  batch_size: 64
+  learning_rate": 3e-4
+  epochs": 3
+  device": "cuda" if torch.cuda.is_available() else "cpu"

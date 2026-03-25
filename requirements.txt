@@ -1,0 +1,9 @@
+yaml
+pytorch
+pandas
+numpy
+ensure
+transformers
+datasets
+tokenizers
+regex

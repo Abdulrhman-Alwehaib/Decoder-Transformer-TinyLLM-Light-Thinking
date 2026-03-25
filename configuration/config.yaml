@@ -1,0 +1,37 @@
+artifacts_root: artifacts
+
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  source_hugging_face: ClusterlabAi/101_billion_arabic_words_dataset
+  fileDomain: "data/train-0000[0-2]-of-*.parquet"
+  specficType: "text"
+  resulted_data_file: artifacts/data_ingestion/data_ingestion/raw_data.csv
+
+
+data_validation:
+  root_dir: artifacts/data_validation
+  inputData: artifacts/data_ingestion/raw_data.csv
+  required_couloumns: ["text"]
+  confirmation_file: artifacts/data_validation/confirm.yaml
+
+data_transformation:
+  root_dir: artifacts/data_transformation
+  inputData: artifacts/data_ingestion/raw_data.csv
+  tokenizer: artifacts/data_transformation/
+  targetColumns: "text"
+  inputIDS: artifacts/data_transformation/input_ids.npy
+  InputMasks: artifacts/data_transformation/attention_masks.npy
+
+
+
+model_trainer:
+  root_dir: artifacts/modelTrainer
+  tokenizer: artifacts/TOKENIZER
+  inputDataProccessed: artifacts/data_transformation/input_ids.npy
+  inputDataMASKS: artifacts/data_transformation/attention_masks.npy
+  trainedModel: artifacts/modelTrainer
+
+inference:
+  tokenizer: artifacts/TOKENIZER
+  trainedModel: artifacts/modelTrainer
