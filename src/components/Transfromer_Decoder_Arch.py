@@ -47,7 +47,6 @@ class Blocks(nn.Module):
         x = x + self.dropout(att_out)
         x = x + self.dropout(self.ffn(self.ln2(x)))
         return x
-
 class decoderNextWordPrediction(nn.Module):
     def __init__(self, vocab_size, d_model, block_size, n_heads, n_layers, dropRate):
         super().__init__()

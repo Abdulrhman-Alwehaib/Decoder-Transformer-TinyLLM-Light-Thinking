@@ -13,6 +13,10 @@ import math
 import Transfromer_Decoder_Arch
 
 
+def CoT(TextPre="فكر خطوه بخطوه:",TextPost="التفكير:") -> list:
+    listOfPromts = [TextPre,TextPost]
+    return listOfPromts
+
 class inference_model():
     def __init__(self,constants_class: constants):
         self.constants = constants_class()
@@ -32,31 +36,26 @@ class inference_model():
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.modelInferenceConfig["tokenizer"])
         self.state_dict = torch.load("artifacts/model_trainer/model.pth", map_location=self.hyperParameters["device"])
-        self.model = self.model.load_state_dict(self.state_dict)
-
-    
-    
+        self.model.load_state_dict(self.state_dict)
 
     def inference(self,arabicInputText,inputTextLength):
         self.model.eval() 
         context_length = self.architecture["block_size"]
-        idx = torch.tensor(self.tokenizer.encode(arabicInputText)).unsqueeze(0).to(self.hyperParameters["device"])
+        CoT_PRE_POST = CoT()
+        cot_input = f"{CoT_PRE_POST[0]} {arabicInputText} {CoT_PRE_POST[1]}"
+        idx = torch.tensor(self.tokenizer.encode(cot_input)).unsqueeze(0).to(self.hyperParameters["device"])
 
         with torch.no_grad():
             for _ in range(inputTextLength): 
             
                 idx_cond = idx[:, -context_length:] 
                 
-                
                 logits = self.model(idx_cond)
-                
                 
                 last_token_logits = logits[:, -1, :] 
                 
-            
                 next_token = torch.argmax(last_token_logits, dim=-1).unsqueeze(1)
                 
-            
                 idx = torch.cat((idx, next_token), dim=1)
 
-        print(self.tokenizer.decode(idx[0].tolist()))
+        print(self.to"kenizer.decode(idx[0].tolist()))
